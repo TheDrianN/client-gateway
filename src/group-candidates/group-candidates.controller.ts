@@ -3,7 +3,7 @@ import { CreateGroupCandidateDto } from './dto/create-group-candidate.dto';
 import { UpdateGroupCandidateDto } from './dto/update-group-candidate.dto';
 import { CANDIDATES_SERVICE, USER_SERVICE,ELECTIONS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { catchError } from 'rxjs';
+import { catchError,firstValueFrom } from 'rxjs';
 import { PaginationDto } from 'src/common';
 
 @Controller('group-candidates')
@@ -17,6 +17,13 @@ export class GroupCandidatesController {
   @Post()
   create(@Body() createGroupCandidateDto: CreateGroupCandidateDto) {
     return this.groupcandidatesClient.send('createGroupCandidate',createGroupCandidateDto).pipe(
+      catchError(err => {throw new RpcException(err)})
+    );
+  }
+
+  @Get('/findAllCandidatesSubElection/:id')
+  findAllCandidatesSubElection(@Param('id') id: string) {
+    return this.groupcandidatesClient.send('findAllCandidatesSubElection',{id}).pipe(
       catchError(err => {throw new RpcException(err)})
     );
   }
@@ -40,7 +47,7 @@ export class GroupCandidatesController {
             throw new RpcException(err);
           });
 
-          const electionData = await this.electionsClient.send("findOneElection",{id:group.sub_election_id}).toPromise().catch(err => {
+          const electionData = await this.electionsClient.send("findOneSubElection",{id:group.sub_election_id}).toPromise().catch(err => {
             throw new RpcException(err);
           });
 
@@ -67,10 +74,66 @@ export class GroupCandidatesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupcandidatesClient.send('findOneGroupCandidate',{id}).pipe(
-      catchError(err => {throw new RpcException(err)})
+  async findOne(@Param('id') id: string) {
+
+    // Usar firstValueFrom para convertir el Observable a Promise
+    const dataGroup = await firstValueFrom(
+      this.groupcandidatesClient.send('findOneGroupCandidate', { id })
+    ).catch(err => {
+      throw new RpcException(err);
+    });
+
+  
+    // Asegúrate de que 'dataGroup' y 'dataGroup.data.candidates' estén presentes
+    if (!dataGroup || !dataGroup.data || !dataGroup.data.candidates) {
+      throw new RpcException('No se encontraron candidatos en el grupo.');
+    }
+  
+
+    // Procesar la información de los candidatos y obtener los datos de usuario
+    const processedData = await Promise.all(
+      dataGroup.data.candidates.map(async (candidate: any) => {
+        // Verificar si el candidato tiene un user_id válido
+        const userId = candidate.user_id;
+        
+        if (candidate.user_id) {
+          try {
+            // Llamada al microservicio de usuarios para obtener datos del usuario
+            const userData = await firstValueFrom(
+              this.userClient.send('findOneUser', { id: candidate.user_id })
+            );
+            // Devolver el candidato con los datos del usuario agregados
+            return {
+              data: {
+                ...candidate,
+                user_names: userData ? userData.data.names : null,
+                user_surnames: userData ? userData.data.surnames : null,
+                user_numdoc: userData ? userData.data.document : null,
+              },
+              meta: dataGroup.meta,
+            };
+          } catch (error) {
+            throw new RpcException('Error obteniendo datos del usuario');
+          }
+        }
+  
+        // Si no tiene user_id, devolver el candidato sin modificaciones
+        return {
+          ...candidate,
+          user_names: null,
+          user_surnames: null,
+        };
+      })
     );
+  
+    // Devolver el grupo de candidatos con los nombres de usuario procesados
+    return {
+      data: {
+        ...dataGroup.data, // Tomar todos los datos de dataGroup.data
+        candidates: processedData, // Candidatos procesados con los datos de usuario
+      },
+      meta: dataGroup.meta, // Si existe meta en tu respuesta original
+    };
   }
 
   @Patch(':id')

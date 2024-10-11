@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import {envs} from './config'
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common';
+import { JwtAuthGuard } from './auth/jwt-auth.guard'; // Importa el guard para proteger la ruta
 
 async function bootstrap() {
   const logger = new Logger('Main-Gateway');
@@ -16,6 +17,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
+  
+
+  app.useGlobalGuards(new JwtAuthGuard()); // Usa el guard personalizado
 
   app.useGlobalFilters(new RpcCustomExceptionFilter())
   app.enableCors({

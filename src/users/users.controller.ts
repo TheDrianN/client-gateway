@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { USER_SERVICE } from 'src/config';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +19,7 @@ export class UsersController {
       catchError(err => {throw new RpcException(err)})
     );
   }
+
 
   @Get()
   findAllUsers(@Query() paginationDto: PaginationDto){

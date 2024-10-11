@@ -7,5 +7,5 @@ export class CreateGroupCandidateDto {
     @IsString()
     public number_list: string;
     @IsOptional()
-    public img: Buffer;
+    public img: string;
 }

@@ -20,6 +20,14 @@ export class SubElectionsController {
       catchError(err => {throw new RpcException(err)})
     );
   }
+  
+  @Get('/subelectionsbystatus')
+  finAllSubElectionbyStatus() {
+   
+    return this.subElectionClient.send("finAllSubElectionbyStatus",{}).pipe(
+      catchError(err => {throw new RpcException(err)})
+    );
+  }
 
   @Get()
   async findAll(@Query() paginationDto: PaginationDto) {
@@ -71,11 +79,5 @@ export class SubElectionsController {
     );
   }
 
-  @Get('/subelectionsbystatus/:id')
-  finAllSubElectionbyStatus(@Param('id') id: string) {
-   
-    return this.subElectionClient.send("finAllSubElectionbyStatus",{id}).pipe(
-      catchError(err => {throw new RpcException(err)})
-    );
-  }
+ 
 }

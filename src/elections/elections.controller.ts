@@ -21,6 +21,44 @@ export class ElectionsController {
     );
   }
 
+  @Get('/findElectionstatusP')
+  async findElectionstatusP() {
+    try {
+      const result = await this.electionsClient.send("findElectionstatusP", {}).toPromise();
+      
+      if (!result) {
+        throw new RpcException('No se recibió respuesta del microservicio');
+      }
+    
+      return result;
+    } catch (err) {
+      throw new RpcException('Error al conectar con el microservicio de elecciones');
+    }
+  }
+
+  @Get('/findSubelectionChapter')
+  async findSubelectionChapter(
+    @Query('election_id', ParseIntPipe) election_id: number,
+    @Query('chapter_id', ParseIntPipe) chapter_id: number
+  ) {
+    try {
+      // Enviar la solicitud al microservicio con los parámetros recibidos
+      const subelections = await this.electionsClient
+        .send('findSubelectionChapter', { election_id, chapter_id })
+        .pipe(
+        catchError(err => {throw new RpcException(err)})
+      );
+      
+      // Devolver la respuesta del microservicio
+      return subelections;
+    } catch (err) {
+      // Manejar el error adecuadamente
+      console.error('Error al conectar con el microservicio:', err.message || err);
+      throw new RpcException('El microservicio no está disponible o hubo un error en la conexión: ' + err.message);
+    }
+  }
+
+
   @Get()
   findAll(@Query() paginationDto:PaginationDto) {
     return this.electionsClient.send("findAllElections",paginationDto).pipe(
@@ -49,34 +87,57 @@ export class ElectionsController {
     );
   }
 
-  @Get(':id/subelections')
+  @Get('/subelections/:id')
   async findAllSubelections(@Param('id', ParseIntPipe) id: string) {
-    const datasubelection = await this.electionsClient.send('getallsubelections', {id}).toPromise()
-    .catch(err => {
-      throw new RpcException(err);
-    });
-
-    const processdData = await Promise.all(datasubelection.data.map(async (subelection)=>{
-      if(subelection.chapter_id > 0){
-        const chapterData = await this.chaptersClient.send('findOneChapter',{id: subelection.chapter_id}).toPromise().catch(err => {
-          throw new RpcException(err);
-        });
-
+    try {
+      // Intentar obtener los datos de subelecciones del microservicio
+      const datasubelection = await this.electionsClient.send('getallsubelections', { id }).toPromise();
+  
+      // Si se obtienen los datos, procesar los subelecciones
+      const processdData = await Promise.all(datasubelection.data.map(async (subelection) => {
+        if (subelection.chapter_id > 0) {
+          // Intentar obtener los datos del capítulo desde el microservicio correspondiente
+          const chapterData = await this.chaptersClient.send('findOneChapter', { id: subelection.chapter_id }).toPromise();
+          
+          return {
+            ...subelection,
+            chapter_name: chapterData ? chapterData.data.name : null, // Verifica si existe el nombre del capítulo
+          };
+        }
         return {
           ...subelection,
-          chapter_name: chapterData ? chapterData.data.name : null, // Asegurar que el nombre esté presente si existe
+          chapter_name: null,
         };
-      }
+      }));
+  
+      // Retornar los datos procesados
       return {
-        ...subelection,
-        chapter_name: null
+        data: processdData,
+        meta: datasubelection.meta,
       };
-    }));
-    return {
-      data: processdData,
-      meta: datasubelection.meta
-    };
+    } catch (err) {
+      // Si ocurre algún error en la comunicación con el microservicio, manejar el error aquí
+      console.error('Error al conectar con el microservicio:', err.message || err);
+      throw new RpcException('El microservicio no está disponible o hubo un error en la conexión: ' + err.message);
+    }
   }
+
+  @Get('/dataelections/:id')
+  async findAllDataElections(@Param('id', ParseIntPipe) id: string) {
+    try {
+      // Intentar obtener los datos de subelecciones del microservicio
+      const datasubelection = await this.electionsClient.send('getallsubelections', { id }).toPromise();
+  
+    
+      return datasubelection
+    } catch (err) {
+      // Si ocurre algún error en la comunicación con el microservicio, manejar el error aquí
+      console.error('Error al conectar con el microservicio:', err.message || err);
+      throw new RpcException('El microservicio no está disponible o hubo un error en la conexión: ' + err.message);
+    }
+  }
+
+
 
 
 }

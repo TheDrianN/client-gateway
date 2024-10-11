@@ -7,10 +7,11 @@ import { SubElectionsModule } from './sub-elections/sub-elections.module';
 import { CandidatesModule } from './candidates/candidates.module';
 import { GroupCandidatesModule } from './group-candidates/group-candidates.module';
 import { TypeCandidatesModule } from './type-candidates/type-candidates.module';
-import { VoterAccessModule } from './voter_access/voter_access.module';
+import { VoteStatusModule } from './vote-status/vote-status.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UsersModule, ChaptersModule, VotingModule, ElectionsModule, SubElectionsModule, CandidatesModule, GroupCandidatesModule, TypeCandidatesModule, VoterAccessModule],
+  imports: [UsersModule, ChaptersModule, VotingModule, ElectionsModule, SubElectionsModule, CandidatesModule, GroupCandidatesModule, TypeCandidatesModule, VoteStatusModule, AuthModule],
   controllers: [],
   providers: [],
 })

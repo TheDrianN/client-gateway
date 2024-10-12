@@ -12,6 +12,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         if (url === '/api/auth/login') {
           return true;
         }
+
+        if (url === '/api/auth/validation') {
+          return true;
+        }
     
         // Si la ruta no es /auth/login, aplica el guard normalmente
         return super.canActivate(context);

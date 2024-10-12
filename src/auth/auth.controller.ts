@@ -9,7 +9,7 @@ export class AuthController {
 
   @Post('/login')
   login(@Body() loginDto: { document: string; password: string }) {
-
+    console.log(loginDto)
     return this.authClient.send('loginAuth', loginDto).pipe(
       catchError(err => {
         throw new RpcException(err.message);
@@ -17,13 +17,12 @@ export class AuthController {
     );
   }
 
-  @Get('/prueba')
-  prueba() {
-    return this.authClient.send('prueba', {}).pipe(
-      catchError((err) => {
-        console.error('Error recibido del microservicio:', err);
-        // Puedes lanzar una excepción o manejar el error de la manera que prefieras
-        return throwError(() => new Error(err.message || 'Error al comunicarse con el microservicio'));
+  @Post('/validation')
+  validation(@Body() loginDto: { document: string; password: string }) {
+    console.log(loginDto)
+    return this.authClient.send('validation', loginDto).pipe(
+      catchError(err => {
+        throw new RpcException(err.message);
       }),
     );
   }

@@ -15,6 +15,8 @@ interface EnvVars{
     CANDIDATES_MICROSERVICE_PORT : number;
     AUTH_MICROSERVICE_HOST: string;
     AUTH_MICROSERVICE_PORT : number;
+    FIREBASE_CREDENTIALS_PATH: string;
+
 }
 
 const envsSchema = joi.object({
@@ -54,4 +56,6 @@ export const envs = {
     candidatesMicroservicesPort: EnvVars.CANDIDATES_MICROSERVICE_PORT,
     authMicroservicesHost: EnvVars.AUTH_MICROSERVICE_HOST,
     authMicroservicesPort: EnvVars.AUTH_MICROSERVICE_PORT,
+    firebase: EnvVars.FIREBASE_CREDENTIALS_PATH
+
 };

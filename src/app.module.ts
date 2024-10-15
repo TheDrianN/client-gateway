@@ -9,9 +9,10 @@ import { GroupCandidatesModule } from './group-candidates/group-candidates.modul
 import { TypeCandidatesModule } from './type-candidates/type-candidates.module';
 import { VoteStatusModule } from './vote-status/vote-status.module';
 import { AuthModule } from './auth/auth.module';
+import { FirebaseServiceModule } from './firebase-service/firebase-service.module';
 
 @Module({
-  imports: [UsersModule, ChaptersModule, VotingModule, ElectionsModule, SubElectionsModule, CandidatesModule, GroupCandidatesModule, TypeCandidatesModule, VoteStatusModule, AuthModule],
+  imports: [UsersModule, ChaptersModule, VotingModule, ElectionsModule, SubElectionsModule, CandidatesModule, GroupCandidatesModule, TypeCandidatesModule, VoteStatusModule, AuthModule, FirebaseServiceModule],
   controllers: [],
   providers: [],
 })

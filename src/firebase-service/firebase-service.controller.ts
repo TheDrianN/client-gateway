@@ -27,5 +27,23 @@ export class FirebaseServiceController {
       };
     }
   }
+
+  @Post('/deleteimg')
+  async delete(@Body('url') url: string): Promise<any> {
+    try {
+      // Eliminar el archivo en Firebase utilizando el servicio
+      await this.firebaseServiceService.deleteFile(url);
+  
+      // Devuelve una respuesta indicando que el archivo fue eliminado
+      return { status: 'success', message: 'Imagen eliminada con éxito' };
+    } catch (error) {
+      // Manejo de errores y respuesta con un estado HTTP apropiado
+      return {
+        statusCode: 500,
+        message: 'Error al eliminar la imagen',
+        error: error.message,
+      };
+    }
+  }
  
 }

@@ -12,6 +12,8 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 
+#google
+src/config/serviceAccountKey.json
 # OS
 .DS_Store
 

@@ -27,5 +27,14 @@ export class AuthController {
     );
   }
 
+  @Post('/votingconfirmation')
+  votingconfirmation(@Body() loginDto: { id: number; message:string }) {
+    return this.authClient.send('votingconfirmation', loginDto).pipe(
+      catchError(err => {
+        throw new RpcException(err.message);
+      }),
+    );
+  }
+
 
 }

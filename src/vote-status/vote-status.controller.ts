@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Query, ParseIntPipe } from '@nestjs/common';
 import { CreateVoteStatusDto } from './dto/create-vote-status.dto';
 import { CANDIDATES_SERVICE, VOTING_SERVICE } from 'src/config';
 import { ClientProxy,RpcException } from '@nestjs/microservices';
@@ -27,12 +27,26 @@ export class VoteStatusController {
     );
   }
 
+  
+  @Post('/validationStatus')
+  validationStatus(
+    @Body('id_user', ParseIntPipe) id_user: number, 
+    @Body('id_election', ParseIntPipe) id_election: number
+  ) {
+    return this.votestatusClient.send('validationStatus', { id_user, id_election }).pipe(
+      catchError(err => {
+        throw new RpcException(err);
+      })
+    );
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.votestatusClient.send('findOneVoteStatus',{id}).pipe(
       catchError(err => {throw new RpcException(err)})
     );
   }
+
 
  
 }

@@ -38,12 +38,9 @@ export class VotingController {
           catchError(err => { throw new RpcException(err); })
         )
       );
-  
-
-  
+    
       // Obtener un candidate_id de los votos para luego buscar el estado de votación
       const firstVoteStatusId = votingData.data[0]?.voteStatusId;
-
   
       // Paso 3: Obtener los detalles del estado de votación
       const voteStatusData = await firstValueFrom(
@@ -51,32 +48,34 @@ export class VotingController {
           catchError(err => { throw new RpcException(err); })
         )
       );
-
-  
+    
       // Paso 4: Obtener los detalles de la elección
       const electionId = voteStatusData.data.elections_id;
       const electionData = await firstValueFrom(
         this.electionClient.send('findOneElection', { id: electionId }).pipe(
           catchError(err => { throw new RpcException(err); })
         )
-      );
-     
-  
+      );  
       // Obtener el número de electores hábiles
       const electoresHabiles = electionData.data.number_voters;
+      const subelectionId = id;
   
- 
-  
-      // Paso 5: Procesar los datos y armar el reporte
-      const votosEmitidos = votingData.data.length;
-      let votosBlancos = 0;
+      // Paso 5: Obtener todos los candidatos de la elección
+      const allCandidates = await firstValueFrom(
+        this.candidatesClient.send('findAllCandidatesSubElection', { id: subelectionId }).pipe(
+          catchError(err => { throw new RpcException(err); })
+        )
+      );
+    
+      // Inicializar el conteo de votos por cada candidato
       const conteoVotos: { [key: string]: number } = {};
+      let votosEmitidos = votingData.data.length;
+      let votosBlancos = 0;
   
       // Contar los votos por grupo y contar votos en blanco
       votingData.data.forEach(vote => {
         const groupCandidatesId = vote.groupCandidatesId;
         
-
         if (groupCandidatesId === "0") { // Si es un voto en blanco
           votosBlancos++;
         } else {
@@ -86,42 +85,25 @@ export class VotingController {
           conteoVotos[groupCandidatesId]++;
         }
       });
-     
-
-
-      // Obtener los datos de los grupos de candidatos
-      const groupCandidatesData = await Promise.all(
-        Object.keys(conteoVotos).map(async (groupCandidatesId) => {
-          return firstValueFrom(
-            this.candidatesClient.send('findOneGroupCandidate', { id: groupCandidatesId }).pipe(
-              catchError(err => { throw new RpcException(err); })
-            )
-          );
-        })
-      );
-
-      // Generar los datos de los candidatos con sus porcentajes
-      const candidatos = Object.keys(conteoVotos).map((groupCandidatesId, index) => {
-        const votos = conteoVotos[groupCandidatesId];
-        const porcentaje = ((votos / votosEmitidos) * 100).toFixed(2);
-  
-        // Obtener el número de lista del grupo de candidatos
-        const groupCandidate = groupCandidatesData[index].data; // Acceder al objeto `data`
-        const numeroLista = groupCandidate ? groupCandidate.number_list : "Desconocido";
+    
+      // Paso 6: Generar los datos de los candidatos con sus porcentajes
+      const candidatos = allCandidates.data.map(candidate => {
+        const votos = conteoVotos[candidate.id] || 0; // Si no hay votos, asigna 0
+        const porcentaje = votosEmitidos > 0 ? ((votos / votosEmitidos) * 100).toFixed(2) : '0.00';
   
         return {
-          nombre: `Lista número ${numeroLista}`,
-          numeroLista: parseInt(numeroLista),
+          nombre: `Lista número ${candidate.number_list}`,
+          numeroLista: parseInt(candidate.number_list),
           votos: votos,
           porcentaje: parseFloat(porcentaje),
         };
       });
-  
+    
       // Calcular el porcentaje de participación
       const porcentajeParticipacion = ((votosEmitidos / electoresHabiles) * 100).toFixed(2);
   
       // Agregar los votos en blanco como un "candidato"
-      const porcentajeBlancos = ((votosBlancos / votosEmitidos) * 100).toFixed(2);
+      const porcentajeBlancos = votosEmitidos > 0 ? ((votosBlancos / votosEmitidos) * 100).toFixed(2) : '0.00';
       candidatos.push({
         nombre: 'Voto en Blanco',
         numeroLista: 0,

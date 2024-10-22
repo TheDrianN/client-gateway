@@ -27,6 +27,13 @@ export class VoteStatusController {
     );
   }
 
+  @Get('/validationUser/:id')
+  validationUser(@Param('id') id: string) {
+    return this.votestatusClient.send('validationUser',{id}).pipe(
+      catchError(err => {throw new RpcException(err)})
+    );
+  }
+
   
   @Post('/validationStatus')
   validationStatus(

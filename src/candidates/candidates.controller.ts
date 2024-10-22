@@ -24,6 +24,13 @@ export class CandidatesController {
       catchError(err => {throw new RpcException(err)})
     );
   }
+  
+  @Get('/validationUser/:id')
+  validationUser(@Param('id') id: string) {
+    return this.candidatesClient.send('validationUser',{id}).pipe(
+      catchError(err => {throw new RpcException(err)})
+    );
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -21,6 +21,13 @@ export class GroupCandidatesController {
     );
   }
 
+  @Get('/validationUser/:id')
+  validationSubElection(@Param('id') id: string) {
+    return this.groupcandidatesClient.send('validationSubElection',{id}).pipe(
+      catchError(err => {throw new RpcException(err)})
+    );
+  }
+
   @Get('/findAllCandidatesSubElection/:id')
   findAllCandidatesSubElection(@Param('id') id: string) {
     return this.groupcandidatesClient.send('findAllCandidatesSubElection',{id}).pipe(

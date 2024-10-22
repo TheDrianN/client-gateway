@@ -21,7 +21,7 @@ export class GroupCandidatesController {
     );
   }
 
-  @Get('/validationUser/:id')
+  @Get('/validationSubElection/:id')
   validationSubElection(@Param('id') id: string) {
     return this.groupcandidatesClient.send('validationSubElection',{id}).pipe(
       catchError(err => {throw new RpcException(err)})

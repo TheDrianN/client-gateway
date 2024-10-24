@@ -94,6 +94,7 @@ export class VotingController {
         return {
           nombre: `Lista número ${candidate.number_list}`,
           numeroLista: parseInt(candidate.number_list),
+          img: candidate.img,
           votos: votos,
           porcentaje: parseFloat(porcentaje),
         };

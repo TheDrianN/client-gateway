@@ -108,6 +108,7 @@ export class VotingController {
       candidatos.push({
         nombre: 'Voto en Blanco',
         numeroLista: 0,
+        img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzQE9elUihagv-Nj3IllH1VhRu50OgOJEkXg&s",
         votos: votosBlancos,
         porcentaje: parseFloat(porcentajeBlancos),
       });

@@ -33,5 +33,5 @@ jobs:
           ls -l src/config
       - name: Deploy to AWS App Runner
         run: |
-          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/21b443e9d1534cc39f38bd6a1edfaffa
+          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/66409566b55845b88cc43581ed84a863
 

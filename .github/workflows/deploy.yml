@@ -30,7 +30,5 @@ jobs:
 
       - name: Deploy to AWS App Runner
         run: |
-          aws apprunner create-service \
-            --cli-input-yaml file://apprunner.yaml || \
-          aws apprunner update-service \
-            --cli-input-yaml file://apprunner.yaml
+          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:123456789012:service/my-service/xxxxxx
+

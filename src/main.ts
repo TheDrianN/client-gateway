@@ -23,7 +23,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new RpcCustomExceptionFilter())
   app.enableCors({
-    origin: 'http://localhost:3301', // Permitir solo solicitudes desde este origen
+    origin: 'https://main.d1t2uoj1umwfc7.amplifyapp.com/', // Permitir solo solicitudes desde este origen
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });

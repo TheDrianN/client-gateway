@@ -1,0 +1,37 @@
+version: 1.0
+runtime: nodejs18
+build:
+  commands:
+    pre-build:
+      - npm install
+    build:
+      - npm run build
+    post-build:
+      - echo "Compilación completada"
+run:
+  command: npm run start:prod
+  network:
+    port: 3000
+  env:
+      - name: FIREBASE_CREDENTIALS_PATH
+        value: "src/config/serviceAccountKey.json"
+      - name: USERS_MICROSERVICE_HOST
+        value: "https://xmnrnbmq4a.us-east-2.awsapprunner.com"
+      - name: USERS_MICROSERVICE_PORT
+        value: "3001"
+      - name: AUTH_MICROSERVICE_HOST
+        value: "https://utm4mepvud.us-east-2.awsapprunner.com"
+      - name: AUTH_MICROSERVICE_PORT
+        value: "3002"
+      - name: CANDIDATES_MICROSERVICE_HOST
+        value: "https://yhzswkd3qp.us-east-2.awsapprunner.com"
+      - name: CANDIDATES_MICROSERVICE_PORT
+        value: "3003"
+      - name: ELECTIONS_MICROSERVICE_HOST
+        value: "https://ghbuzdtxhb.us-east-2.awsapprunner.com"
+      - name: ELECTIONS_MICROSERVICE_PORT
+        value: "3004"
+      - name: VOTING_MICROSERVICE_HOST
+        value: "https://ruhynimmpy.us-east-2.awsapprunner.com"
+      - name: VOTING_MICROSERVICE_PORT
+        value: "3005"

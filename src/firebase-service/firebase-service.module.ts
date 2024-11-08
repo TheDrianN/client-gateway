@@ -4,6 +4,7 @@ import {  envs } from 'src/config';
 import * as admin from 'firebase-admin';
 import { join } from 'path';
 import { FirebaseServiceService } from './firebase-service.service';
+import * as fs from 'fs';
 
 @Module({
   controllers: [FirebaseServiceController],
@@ -17,9 +18,16 @@ export class FirebaseServiceModule {
       envs.firebase // La ruta dinámica desde el .env
     );
 
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccountPath),
-      storageBucket: 'cip-img.appspot.com', // Reemplaza por el nombre de tu bucket de Firebase
-    });
+    if (fs.existsSync(serviceAccountPath)) {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccountPath),
+        storageBucket: 'cip-img.appspot.com', // Reemplaza por el nombre de tu bucket de Firebase
+      });
+      console.log('Firebase initialized successfully.');
+    } else {
+      console.warn(
+        `Firebase credentials not found at ${serviceAccountPath}. Skipping Firebase initialization.`
+      );
+    }
   }
 }

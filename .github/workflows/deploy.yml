@@ -26,7 +26,7 @@ jobs:
           SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         run: |
           # Guardar el secreto en un archivo para usarlo en App Runner
-          echo "$SERVICE_ACCOUNT_KEY" > /app/src/config/serviceAccountKey.json
+          echo "$SERVICE_ACCOUNT_KEY" > /src/config/serviceAccountKey.json
 
       - name: Deploy to AWS App Runner
         run: |

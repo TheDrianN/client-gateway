@@ -37,5 +37,5 @@ jobs:
           cat src/config/serviceAccountKey.json | jq
       - name: Deploy to AWS App Runner
         run: |
-          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/e1061b88aa8d40b684c5422f16f71b32
+          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/8b7f6957affb4f9a8d17d96501e53fec
 

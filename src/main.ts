@@ -17,7 +17,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
-  
+
+  console.log("hos1",envs.authMicroservicesHost);
+  console.log("port1",envs.authMicroservicesPort);
+
 
   app.useGlobalGuards(new JwtAuthGuard()); // Usa el guard personalizado
 

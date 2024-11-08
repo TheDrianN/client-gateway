@@ -10,6 +10,7 @@ export class AuthController {
 
   @Post('/login')
   login(@Body() loginDto: CreateAuthDto) {
+    console.log(loginDto)
     return this.authClient.send('loginAuth', loginDto).pipe(
       catchError(err => {
         throw new RpcException(err.message);

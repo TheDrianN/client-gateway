@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Inject, Get } from '@nestjs/common';
+import { Controller, Post, Body, Inject, Get, HttpStatus } from '@nestjs/common';
 import { AUTH_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { catchError, throwError } from 'rxjs';
@@ -10,7 +10,6 @@ export class AuthController {
 
   @Post('/login')
   login(@Body() loginDto: CreateAuthDto) {
-    console.log(loginDto)
     return this.authClient.send('loginAuth', loginDto).pipe(
       catchError(err => {
         throw new RpcException(err.message);
@@ -19,13 +18,24 @@ export class AuthController {
   }
 
   @Post('/validation')
-  validation(@Body() loginDto: CreateAuthDto) {
-    return this.authClient.send('validation', loginDto).pipe(
-      catchError(err => {
-        throw new RpcException(err.message);
-      }),
-    );
-  }
+validation(@Body() loginDto: CreateAuthDto) {
+  return this.authClient.send('validation', loginDto).pipe(
+    catchError((err) => {
+      console.error('Error capturado:', err);
+
+      // Si el error es un objeto con más detalles, puedes manejarlo mejor aquí
+      const errorMessage = err.message || 'Error desconocido en el microservicio';
+      const statusCode = err.status || HttpStatus.INTERNAL_SERVER_ERROR;
+
+      // Lanza una excepción personalizada con mensaje y estado
+      throw new RpcException({
+        message: errorMessage,
+        statusCode,
+      });
+    }),
+  );
+}
+
 
   @Post('/votingconfirmation')
   votingconfirmation(@Body() loginDto: { id: number; message:string }) {

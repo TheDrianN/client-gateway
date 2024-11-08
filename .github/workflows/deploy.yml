@@ -26,9 +26,11 @@ jobs:
           SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         run: |
           # Guardar el secreto en un archivo para usarlo en App Runner
-          echo "$SERVICE_ACCOUNT_KEY" > src/config/serviceAccountKey.json
+          echo "$SERVICE_ACCOUNT_KEY" > /app/src/config/serviceAccountKey.json
 
       - name: Deploy to AWS App Runner
         run: |
-          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/21b443e9d1534cc39f38bd6a1edfaffa
-
+          aws apprunner create-service \
+            --cli-input-yaml file://apprunner.yaml || \
+          aws apprunner update-service \
+            --cli-input-yaml file://apprunner.yaml

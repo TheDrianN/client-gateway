@@ -16,22 +16,22 @@ run:
       - name: FIREBASE_CREDENTIALS_PATH
         value: "src/config/serviceAccountKey.json"
       - name: USERS_MICROSERVICE_HOST
-        value: "https://xmnrnbmq4a.us-east-2.awsapprunner.com"
+        value: "xmnrnbmq4a.us-east-2.awsapprunner.com"
       - name: USERS_MICROSERVICE_PORT
         value: "3001"
       - name: AUTH_MICROSERVICE_HOST
-        value: "https://utm4mepvud.us-east-2.awsapprunner.com"
+        value: "utm4mepvud.us-east-2.awsapprunner.com"
       - name: AUTH_MICROSERVICE_PORT
         value: "3002"
       - name: CANDIDATES_MICROSERVICE_HOST
-        value: "https://yhzswkd3qp.us-east-2.awsapprunner.com"
+        value: "yhzswkd3qp.us-east-2.awsapprunner.com"
       - name: CANDIDATES_MICROSERVICE_PORT
         value: "3003"
       - name: ELECTIONS_MICROSERVICE_HOST
-        value: "https://ghbuzdtxhb.us-east-2.awsapprunner.com"
+        value: "ghbuzdtxhb.us-east-2.awsapprunner.com"
       - name: ELECTIONS_MICROSERVICE_PORT
         value: "3004"
       - name: VOTING_MICROSERVICE_HOST
-        value: "https://ruhynimmpy.us-east-2.awsapprunner.com"
+        value: "ruhynimmpy.us-east-2.awsapprunner.com"
       - name: VOTING_MICROSERVICE_PORT
         value: "3005"

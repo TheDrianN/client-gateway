@@ -12,7 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { FirebaseServiceModule } from './firebase-service/firebase-service.module';
 
 @Module({
-  imports: [UsersModule, ChaptersModule, VotingModule, ElectionsModule, SubElectionsModule, CandidatesModule, GroupCandidatesModule, TypeCandidatesModule, VoteStatusModule, AuthModule, FirebaseServiceModule],
+  imports: [UsersModule, ChaptersModule, VotingModule, ElectionsModule, SubElectionsModule, CandidatesModule, GroupCandidatesModule, TypeCandidatesModule, VoteStatusModule, AuthModule],
   controllers: [],
   providers: [],
 })

@@ -14,7 +14,6 @@ import * as fs from 'fs';
 export class FirebaseServiceModule {
   constructor() {
     const serviceAccountPath = join(
-      process.cwd(), // El directorio raíz del proyecto
       envs.firebase // La ruta dinámica desde el .env
     );
 

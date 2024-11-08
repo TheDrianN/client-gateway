@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master  # Configura para que se ejecute en cada push a la rama 'main'
-
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -30,5 +30,7 @@ jobs:
 
       - name: Deploy to AWS App Runner
         run: |
-          # Ejecutar el despliegue usando apprunner.yaml
-          aws apprunner create-service --cli-input-yaml file://apprunner.yaml
+          aws apprunner create-service \
+            --cli-input-yaml file://apprunner.yaml || \
+          aws apprunner update-service \
+            --cli-input-yaml file://apprunner.yaml

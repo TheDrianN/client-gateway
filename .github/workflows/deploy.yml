@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master  # Configura para que se ejecute en cada push a la rama 'main'
-    workflow_dispatch:
+
 
 jobs:
   deploy:

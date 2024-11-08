@@ -30,7 +30,5 @@ jobs:
 
       - name: Deploy to AWS App Runner
         run: |
-          aws apprunner create-service \
-            --cli-input-yaml file://apprunner.yaml || \
-          aws apprunner update-service \
-            --cli-input-yaml file://apprunner.yaml
+          aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/21b443e9d1534cc39f38bd6a1edfaffa
+

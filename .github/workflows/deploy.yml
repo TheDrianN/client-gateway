@@ -31,6 +31,10 @@ jobs:
         run: |
           echo "Listing files in src/config:"
           ls -l src/config
+      - name: Validate serviceAccountKey.json content
+        run: |
+          echo "Content of serviceAccountKey.json:"
+          cat src/config/serviceAccountKey.json | jq
       - name: Deploy to AWS App Runner
         run: |
           aws apprunner start-deployment --service-arn arn:aws:apprunner:us-east-2:891377194889:service/client-gateway/66409566b55845b88cc43581ed84a863

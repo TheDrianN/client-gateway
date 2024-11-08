@@ -3,7 +3,8 @@ name: Deploy to AWS App Runner
 on:
   push:
     branches:
-      - main  # Configura para que se ejecute en cada push a la rama 'main'
+      - master  # Configura para que se ejecute en cada push a la rama 'main'
+    workflow_dispatch:
 
 jobs:
   deploy:

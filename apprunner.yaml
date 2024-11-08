@@ -18,20 +18,20 @@ run:
       - name: USERS_MICROSERVICE_HOST
         value: "xmnrnbmq4a.us-east-2.awsapprunner.com"
       - name: USERS_MICROSERVICE_PORT
-        value: "3001"
+        value: 3001
       - name: AUTH_MICROSERVICE_HOST
         value: "utm4mepvud.us-east-2.awsapprunner.com"
       - name: AUTH_MICROSERVICE_PORT
-        value: "3002"
+        value: 3002
       - name: CANDIDATES_MICROSERVICE_HOST
         value: "yhzswkd3qp.us-east-2.awsapprunner.com"
       - name: CANDIDATES_MICROSERVICE_PORT
-        value: "3003"
+        value: 3003
       - name: ELECTIONS_MICROSERVICE_HOST
         value: "ghbuzdtxhb.us-east-2.awsapprunner.com"
       - name: ELECTIONS_MICROSERVICE_PORT
-        value: "3004"
+        value: 3004
       - name: VOTING_MICROSERVICE_HOST
         value: "ruhynimmpy.us-east-2.awsapprunner.com"
       - name: VOTING_MICROSERVICE_PORT
-        value: "3005"
+        value: 3005
